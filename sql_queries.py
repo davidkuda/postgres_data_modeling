@@ -11,7 +11,7 @@ class TableProperties:
         self.data_types = [table_property[1] for table_property in table_properties]
         self.validate()
         self.create_statements = self.concat_cols_with_types()
-        self.queries = {'create_table': get_query_create_table(self.table_name, self.create_statements),
+        self.queries = {'create_table': get_query_create_table(self.table_name, *self.create_statements),
                         'drop_table': get_query_drop_table(self.table_name)}
 
     def validate(self):
