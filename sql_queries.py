@@ -1,18 +1,25 @@
-# DROP TABLES
+from pg_functions import get_query_create_table, get_query_drop_table
+from typing import List
 
-songplay_table_drop = ""
-user_table_drop = ""
-song_table_drop = ""
-artist_table_drop = ""
-time_table_drop = ""
+# TableProperties Class Definition
 
-# CREATE TABLES
+class TableProperties:
+    def __init__(self, table_name: str, table_properties: List[tuple]):
+        self.table_name = table_name
+        self.columns = [table_property[0] for table_property in table_properties]
+        self.data_types = [table_property[1] for table_property in table_properties]
+        self.validate()
+        self.create_statements = self.concat_cols_with_types()
+        self.queries = {'create_table': get_query_create_table(self.table_name, self.create_statements),
+                        'drop_table': get_query_drop_table(self.table_name)}
 
-songplay_table_create = ("""
-""")
+    def validate(self):
+        if len(self.columns) != len(self.data_types):
+            raise ValueError('Make sure that columns and data_types are equally long.')
 
-user_table_create = ("""
-""")
+    def concat_cols_with_types(self):
+        create_statements = [f'{self.columns[index]} {self.data_types[index]}' for index in range(len(self.columns))]
+        return create_statements
 
 song_table_create = ("""
 """)
