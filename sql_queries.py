@@ -26,27 +26,27 @@ class TableProperties:
 # TableProperties Instances
 
 songplays_properties = TableProperties('songplays',
-                                       [('user_id', 'INT'),
+                                       [('user_id', 'TEXT PRIMARY KEY'),
                                         ('first_name', 'TEXT'),
                                         ('last_name', 'TEXT'),
                                         ('gender', 'TEXT'),
                                         ('level', 'TEXT')])
 
 user_properties = TableProperties('users',
-                                  [('user_id', 'TEXT'),
+                                  [('user_id', 'TEXT PRIMARY KEY'),
                                    ('last_name', 'TEXT'),
                                    ('gender', 'TEXT'),
                                    ('level', 'TEXT')])
 
 songs_properties = TableProperties('songs',
-                                   [('song_id', 'INT'),
+                                   [('song_id', 'TEXT PRIMARY KEY'),
                                     ('title', 'TEXT'),
-                                    ('artist_id', 'INT REFERENCES artist(id)'),
+                                    ('artist_id', 'TEXT REFERENCES artists(artist_id)'),
                                     ('year', 'INT'),
                                     ('duration', 'DECIMAL')])
 
 artists_properties = TableProperties('artists',
-                                     [('artist_id', 'TEXT'),
+                                     [('artist_id', 'TEXT PRIMARY KEY'),
                                       ('name', 'TEXT'),
                                       ('location', 'TEXT'),
                                       ('latitude', 'DECIMAL'),
