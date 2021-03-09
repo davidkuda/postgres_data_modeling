@@ -61,7 +61,21 @@ time_properties = TableProperties('time',
                                    ('year', 'INT'),
                                    ('weekday', 'INT')])
 
+# DROP TABLES
 
+songplay_table_drop = songplays_properties.queries['drop_table']
+user_table_drop = user_properties.queries['drop_table']
+song_table_drop = songs_properties.queries['drop_table']
+artist_table_drop = artists_properties.queries['drop_table']
+time_table_drop = time_properties.queries['drop_table']
+
+# CREATE TABLES
+
+songplay_table_create = songplays_properties.queries['create_table']
+user_table_create = user_properties.queries['create_table']
+song_table_create = songs_properties.queries['create_table']
+artist_table_create = artists_properties.queries['create_table']
+time_table_create = time_properties.queries['create_table']
 
 # INSERT RECORDS
 
