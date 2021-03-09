@@ -1,6 +1,7 @@
 from pg_functions import get_query_create_table, get_query_drop_table
 from typing import List
 
+
 # TableProperties Class Definition
 
 class TableProperties:
@@ -21,14 +22,46 @@ class TableProperties:
         create_statements = [f'{self.columns[index]} {self.data_types[index]}' for index in range(len(self.columns))]
         return create_statements
 
-song_table_create = ("""
-""")
 
-artist_table_create = ("""
-""")
+# TableProperties Instances
 
-time_table_create = ("""
-""")
+songplays_properties = TableProperties('songplays',
+                                       [('user_id', 'INT'),
+                                        ('first_name', 'TEXT'),
+                                        ('last_name', 'TEXT'),
+                                        ('gender', 'TEXT'),
+                                        ('level', 'TEXT')])
+
+user_properties = TableProperties('users',
+                                  [('user_id', 'TEXT'),
+                                   ('last_name', 'TEXT'),
+                                   ('gender', 'TEXT'),
+                                   ('level', 'TEXT')])
+
+songs_properties = TableProperties('songs',
+                                   [('song_id', 'INT'),
+                                    ('title', 'TEXT'),
+                                    ('artist_id', 'INT REFERENCES artist(id)'),
+                                    ('year', 'INT'),
+                                    ('duration', 'DECIMAL')])
+
+artists_properties = TableProperties('artists',
+                                     [('artist_id', 'TEXT'),
+                                      ('name', 'TEXT'),
+                                      ('location', 'TEXT'),
+                                      ('latitude', 'DECIMAL'),
+                                      ('longitude', 'DECIMAL')])
+
+time_properties = TableProperties('time',
+                                  [('start_time', 'DECIMAL'),
+                                   ('hour', 'INT'),
+                                   ('day', 'INT'),
+                                   ('week', 'INT'),
+                                   ('month', 'INT'),
+                                   ('year', 'INT'),
+                                   ('weekday', 'INT')])
+
+
 
 # INSERT RECORDS
 
@@ -43,7 +76,6 @@ song_table_insert = ("""
 
 artist_table_insert = ("""
 """)
-
 
 time_table_insert = ("""
 """)
