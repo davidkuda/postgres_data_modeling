@@ -1,4 +1,4 @@
-from pg_functions import get_query_create_table, get_query_drop_table
+from pg_functions import get_query_create_table, get_query_drop_table, get_query_insert_into
 from typing import List
 
 
@@ -72,27 +72,18 @@ time_table_drop = time_properties.queries['drop_table']
 # CREATE TABLES
 
 songplay_table_create = songplays_properties.queries['create_table']
-user_table_create = user_properties.queries['create_table']
+user_table_create = users_properties.queries['create_table']
 song_table_create = songs_properties.queries['create_table']
 artist_table_create = artists_properties.queries['create_table']
 time_table_create = time_properties.queries['create_table']
 
 # INSERT RECORDS
 
-songplay_table_insert = ("""
-""")
-
-user_table_insert = ("""
-""")
-
-song_table_insert = ("""
-""")
-
-artist_table_insert = ("""
-""")
-
-time_table_insert = ("""
-""")
+songplay_table_insert = get_query_insert_into(songplays_properties.table_name, songplays_properties.columns)
+user_table_insert = get_query_insert_into(users_properties.table_name, users_properties.columns)
+song_table_insert = get_query_insert_into(songs_properties.table_name, songs_properties.columns)
+artist_table_insert = get_query_insert_into(artists_properties.table_name, artists_properties.columns)
+time_table_insert = get_query_insert_into(time_properties.table_name, time_properties.columns)
 
 # FIND SONGS
 
