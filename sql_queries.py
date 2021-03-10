@@ -32,11 +32,11 @@ songplays_properties = TableProperties('songplays',
                                         ('gender', 'TEXT'),
                                         ('level', 'TEXT')])
 
-user_properties = TableProperties('users',
-                                  [('user_id', 'TEXT PRIMARY KEY'),
-                                   ('last_name', 'TEXT'),
-                                   ('gender', 'TEXT'),
-                                   ('level', 'TEXT')])
+users_properties = TableProperties('users',
+                                   [('user_id', 'TEXT PRIMARY KEY'),
+                                    ('last_name', 'TEXT'),
+                                    ('gender', 'TEXT'),
+                                    ('level', 'TEXT')])
 
 songs_properties = TableProperties('songs',
                                    [('song_id', 'TEXT PRIMARY KEY'),
@@ -64,7 +64,7 @@ time_properties = TableProperties('time',
 # DROP TABLES
 
 songplay_table_drop = songplays_properties.queries['drop_table']
-user_table_drop = user_properties.queries['drop_table']
+user_table_drop = users_properties.queries['drop_table']
 song_table_drop = songs_properties.queries['drop_table']
 artist_table_drop = artists_properties.queries['drop_table']
 time_table_drop = time_properties.queries['drop_table']
