@@ -34,6 +34,7 @@ songplays_properties = TableProperties('songplays',
 
 users_properties = TableProperties('users',
                                    [('user_id', 'TEXT PRIMARY KEY'),
+                                    ('first_name', 'TEXT'),
                                     ('last_name', 'TEXT'),
                                     ('gender', 'TEXT'),
                                     ('level', 'TEXT')])
