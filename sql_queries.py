@@ -54,7 +54,7 @@ artists_properties = TableProperties('artists',
                                       ('longitude', 'DECIMAL')])
 
 time_properties = TableProperties('time',
-                                  [('start_time', 'DECIMAL'),
+                                  [('start_time', 'TIMESTAMP'),
                                    ('hour', 'INT'),
                                    ('day', 'INT'),
                                    ('week', 'INT'),
