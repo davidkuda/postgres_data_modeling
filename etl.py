@@ -70,13 +70,13 @@ def process_data(cur, conn, filepath, file_processor):
 
     # get total number of files found
     num_files = len(all_files)
-    print('{} files found in {}'.format(num_files, filepath))
+    print(f'{num_files} files found in {filepath}')
 
     # iterate over files and process
     for i, datafile in enumerate(all_files, 1):
         file_processor(cur, datafile)
         conn.commit()
-        print('{}/{} files processed.'.format(i, num_files))
+        print(f'{i}/{num_files} files processed.')
 
 
 def main():
