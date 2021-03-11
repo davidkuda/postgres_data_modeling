@@ -52,20 +52,21 @@ def process_log_file(cur, filepath):
         cur.execute(user_table_insert, row)
 
     # insert songplay records
-    for index, row in df.iterrows():
-        
-        # get songid and artistid from song and artist tables
-        cur.execute(song_select, (row.song, row.artist, row.length))
-        results = cur.fetchone()
-        
-        if results:
-            songid, artistid = results
-        else:
-            songid, artistid = None, None
+    def tbd():
+        for index, row in df.iterrows():
 
-        # insert songplay record
-        songplay_data = 
-        cur.execute(songplay_table_insert, songplay_data)
+            # get songid and artistid from song and artist tables
+            cur.execute(song_select, (row.song, row.artist, row.length))
+            results = cur.fetchone()
+
+            if results:
+                songid, artistid = results
+            else:
+                songid, artistid = None, None
+
+            # insert songplay record
+            # songplay_data =
+            cur.execute(songplay_table_insert, songplay_data)
 
 
 def process_data(cur, conn, filepath, file_processor):
