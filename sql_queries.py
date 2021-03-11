@@ -26,29 +26,26 @@ class TableProperties:
 
 # TableProperties Instances
 
-songplays_properties = TableProperties('songplays',
-                                       [('user_id', 'TEXT PRIMARY KEY'),
-                                        ('first_name', 'TEXT'),
-                                        ('last_name', 'TEXT'),
-                                        ('gender', 'TEXT'),
-                                        ('level', 'TEXT')])
-
 users_properties = TableProperties('users',
-                                   [('user_id', 'TEXT PRIMARY KEY'),
+                                   # [('user_id', 'TEXT PRIMARY KEY'),
+                                   [('user_id', 'TEXT'),
                                     ('first_name', 'TEXT'),
                                     ('last_name', 'TEXT'),
                                     ('gender', 'TEXT'),
                                     ('level', 'TEXT')])
 
 songs_properties = TableProperties('songs',
-                                   [('song_id', 'TEXT PRIMARY KEY'),
+                                   # [('song_id', 'TEXT PRIMARY KEY'),
+                                   [('song_id', 'TEXT'),
                                     ('title', 'TEXT'),
-                                    ('artist_id', 'TEXT REFERENCES artists(artist_id)'),
+                                    # ('artist_id', 'TEXT REFERENCES artists(artist_id)'),
+                                    ('artist_id', 'TEXT'),
                                     ('year', 'INT'),
                                     ('duration', 'DECIMAL')])
 
 artists_properties = TableProperties('artists',
-                                     [('artist_id', 'TEXT PRIMARY KEY'),
+                                     # [('artist_id', 'TEXT PRIMARY KEY'),
+                                     [('artist_id', 'TEXT'),
                                       ('name', 'TEXT'),
                                       ('location', 'TEXT'),
                                       ('latitude', 'DECIMAL'),
@@ -62,6 +59,20 @@ time_properties = TableProperties('time',
                                    ('month', 'INT'),
                                    ('year', 'INT'),
                                    ('weekday', 'INT')])
+
+songplays_properties = TableProperties('songplays',
+                                       [('songplay_id', 'TEXT'),
+                                        ('start_time', 'TIMESTAMP'),
+                                        # ('user_id', 'TEXT REFERENCES users(user_id)'),
+                                        ('user_id', 'TEXT'),
+                                        ('level', 'TEXT'),
+                                        # ('song_id', 'TEXT REFERENCES songs(song_id)'),
+                                        ('song_id', 'TEXT'),
+                                        # ('artist_id', 'TEXT REFERENCES artists(id)'),
+                                        ('artist_id', 'TEXT'),
+                                        ('session_id', 'TEXT'),
+                                        ('location', 'TEXT'),
+                                        ('user_agent', 'TEXT')])
 
 # DROP TABLES
 
