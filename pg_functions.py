@@ -11,20 +11,19 @@ def get_query_create_table(table_name, *args):
     return query_create_table
 
 
-def get_query_insert_into(table_name, **kwargs):
-    columns = ', '.join(kwargs.keys())
-    values_list = (kwargs.values())
-    values_tuple = tuple(values_list)
+def get_query_insert_into(table_name, columns):
+
+    columns_as_string = ', '.join(columns)
 
     value_placeholders = ''
-    for value in values_list:
+    for i in columns:
         value_placeholders += '(%s), '
     value_placeholders = value_placeholders.strip(', ')
 
     query = F"""
     INSERT INTO
-      {table_name}({columns})
+      {table_name} ({columns_as_string})
     VALUES
       ({value_placeholders});
     """
-    return query, values_tuple
+    return query
