@@ -7,40 +7,44 @@ from sql_queries import *
 
 def process_song_file(cur, filepath):
     # open song file
-    df = 
+    df_song_file = pd.read_json(filepath, lines=True)
 
     # insert song record
-    song_data = 
+    song_data = df_song_file[['song_id', 'title', 'artist_id', 'year', 'duration']].values
     cur.execute(song_table_insert, song_data)
     
     # insert artist record
-    artist_data = 
+    artist_data = df_song_file[['artist_id', 'artist_name', 'artist_location',
+                                'artist_latitude', 'artist_longitude']].values
     cur.execute(artist_table_insert, artist_data)
 
 
 def process_log_file(cur, filepath):
     # open log file
-    df = 
+    df_log_file = pd.read_json(filepath, lines=True)
 
     # filter by NextSong action
-    df = 
+    next_song_pages = df_log_file['page'] == 'NextSong'
+    df_log_file = df_log_file[next_song_pages]
 
     # convert timestamp column to datetime
-    t = 
-    
-    # insert time data records
-    time_data = 
-    column_labels = 
-    time_df = 
+    timestamp = df_log_file['ts']
+    t = pd.to_datetime(timestamp)
 
-    for i, row in time_df.iterrows():
+    # insert time data records
+    time_data = [t, t.dt.hour, t.dt.day, t.dt.isocalendar().week, t.dt.month, t.dt.year, t.dt.weekday]
+    column_labels = ['timestamp', 'hour', 'day', 'week of year', 'month', 'year', 'weekday']
+    d = dict(zip(column_labels, time_data))
+    df_time = pd.DataFrame(d)
+
+    for i, row in df_time.iterrows():
         cur.execute(time_table_insert, list(row))
 
     # load user table
-    user_df = 
+    df_users = df_log_file[['userId', 'firstName', 'lastName', 'gender', 'level']]
 
     # insert user records
-    for i, row in user_df.iterrows():
+    for i, row in df_users.iterrows():
         cur.execute(user_table_insert, row)
 
     # insert songplay records
