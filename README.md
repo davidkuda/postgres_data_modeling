@@ -52,5 +52,5 @@ Based on the two original tables I will create four dimension tables:
 
 The "songplays" table is in the center of the four dimension tables:
 
-![The Star Schema](documentation/images/schemas/star_schema.png)
+![The Star Schema](documentation/images/schemas/songplays.png)
 
