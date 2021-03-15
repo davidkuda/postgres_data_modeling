@@ -92,21 +92,3 @@ create_table_queries = [artist_table_create, user_table_create, song_table_creat
                         time_table_create, songplay_table_create]
 drop_table_queries = [songplay_table_drop, user_table_drop, song_table_drop,
                       artist_table_drop, time_table_drop]
-
-if __name__ == '__main__':
-    def print_queries():
-        queries = list()
-        queries.extend(create_table_queries)
-        queries.extend(drop_table_queries)
-        for query in queries:
-            print(query)
-
-    # print(songplays_properties.columns)
-
-    postgres_table_properties = [users_properties, songs_properties, artists_properties,
-                                 time_properties, songplays_properties]
-
-    for p in postgres_table_properties:
-        pass
-
-    print(songplays_properties.queries['insert_into'])
