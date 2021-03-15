@@ -1,8 +1,18 @@
 import os
 import glob
+import sys
+
 import psycopg2
 import pandas as pd
+
 from sql_queries import *
+
+
+def set_sys_path():
+    """Make sure that sys.path[0] is the directory "src"."""
+    correct_path = os.path.abspath('src/')
+    print(f'Setting path to {correct_path}')
+    sys.path.insert(0, correct_path)
 
 
 def process_song_file(cur, filepath):
