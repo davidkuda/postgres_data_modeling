@@ -68,11 +68,11 @@ time_table_create = time_properties.queries['create_table']
 
 # INSERT RECORDS
 
-songplay_table_insert = get_query_insert_into(songplays_properties.table_name, songplays_properties.columns)
-user_table_insert = get_query_insert_into(users_properties.table_name, users_properties.columns)
-song_table_insert = get_query_insert_into(songs_properties.table_name, songs_properties.columns)
-artist_table_insert = get_query_insert_into(artists_properties.table_name, artists_properties.columns)
-time_table_insert = get_query_insert_into(time_properties.table_name, time_properties.columns)
+songplay_table_insert = songplays_properties.queries['insert_into']
+user_table_insert = users_properties.queries['insert_into']
+song_table_insert = songs_properties.queries['insert_into']
+artist_table_insert = artists_properties.queries['insert_into']
+time_table_insert = time_properties.queries['insert_into']
 
 # FIND SONGS
 
