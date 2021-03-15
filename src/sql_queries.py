@@ -1,5 +1,4 @@
 from TableProperties import TableProperties
-from src.pg_functions import get_query_insert_into
 
 
 users_properties = TableProperties('users',
