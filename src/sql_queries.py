@@ -2,32 +2,28 @@ from TableProperties import TableProperties
 
 
 users_properties = TableProperties('users',
-                                   # [('user_id', 'TEXT PRIMARY KEY'),
-                                   [('user_id', 'TEXT'),
+                                   [('user_id', 'INT PRIMARY KEY'),
                                     ('first_name', 'TEXT'),
                                     ('last_name', 'TEXT'),
                                     ('gender', 'TEXT'),
                                     ('level', 'TEXT')])
 
 songs_properties = TableProperties('songs',
-                                   # [('song_id', 'TEXT PRIMARY KEY'),
-                                   [('song_id', 'TEXT'),
+                                   [('song_id', 'TEXT PRIMARY KEY'),
                                     ('title', 'TEXT'),
-                                    # ('artist_id', 'TEXT REFERENCES artists(artist_id)'),
-                                    ('artist_id', 'TEXT'),
+                                    ('artist_id', 'TEXT REFERENCES artists(artist_id)'),
                                     ('year', 'INT'),
                                     ('duration', 'DECIMAL')])
 
 artists_properties = TableProperties('artists',
-                                     # [('artist_id', 'TEXT PRIMARY KEY'),
-                                     [('artist_id', 'TEXT'),
+                                     [('artist_id', 'TEXT PRIMARY KEY'),
                                       ('name', 'TEXT'),
                                       ('location', 'TEXT'),
                                       ('latitude', 'DECIMAL'),
                                       ('longitude', 'DECIMAL')])
 
 time_properties = TableProperties('time',
-                                  [('start_time', 'TIMESTAMP'),
+                                  [('start_time', 'TIMESTAMP PRIMARY KEY'),
                                    ('hour', 'INT'),
                                    ('day', 'INT'),
                                    ('week', 'INT'),
@@ -37,14 +33,11 @@ time_properties = TableProperties('time',
 
 songplays_properties = TableProperties('songplays',
                                        [('songplay_id', 'SERIAL PRIMARY KEY'),
-                                        ('start_time', 'TIMESTAMP'),
-                                        # ('user_id', 'TEXT REFERENCES users(user_id)'),
-                                        ('user_id', 'TEXT'),
+                                        ('start_time', 'BIGINT'),
+                                        ('user_id', 'TEXT REFERENCES users(user_id)'),
                                         ('level', 'TEXT'),
-                                        # ('song_id', 'TEXT REFERENCES songs(song_id)'),
-                                        ('song_id', 'TEXT'),
-                                        # ('artist_id', 'TEXT REFERENCES artists(id)'),
-                                        ('artist_id', 'TEXT'),
+                                        ('song_id', 'TEXT REFERENCES songs(song_id)'),
+                                        ('artist_id', 'TEXT REFERENCES artists(artist_id)'),
                                         ('session_id', 'TEXT'),
                                         ('location', 'TEXT'),
                                         ('user_agent', 'TEXT')])
@@ -92,3 +85,4 @@ create_table_queries = [artist_table_create, user_table_create, song_table_creat
                         time_table_create, songplay_table_create]
 drop_table_queries = [songplay_table_drop, user_table_drop, song_table_drop,
                       artist_table_drop, time_table_drop]
+
