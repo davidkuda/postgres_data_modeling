@@ -12,6 +12,9 @@ def get_query_create_table(table_name, *args):
 
 
 def get_query_insert_into(table_name, columns):
+    
+    if ['SERIAL', 'serial'] in columns:
+        columns.remove()
 
     columns_as_string = ', '.join(columns)
 

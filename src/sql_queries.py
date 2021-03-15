@@ -1,5 +1,7 @@
-from pg_functions import get_query_create_table, get_query_drop_table, get_query_insert_into
+import re
 from typing import List
+
+from pg_functions import get_query_create_table, get_query_drop_table, get_query_insert_into
 
 
 # TableProperties Class Definition
@@ -11,8 +13,9 @@ class TableProperties:
         self.data_types = [table_property[1] for table_property in table_properties]
         self.validate()
         self.create_statements = self.concat_cols_with_types()
-        self.queries = {'create_table': get_query_create_table(self.table_name, *self.create_statements),
-                        'drop_table': get_query_drop_table(self.table_name),
+        self.queries = {'create_table': self.get_query_create_table(),
+                        'drop_table': f'DROP TABLE IF EXISTS {self.table_name};',
+                        'insert_into': self.get_query_insert_into(),
                         'select': f'SELECT {", ".join(self.columns)} FROM {self.table_name};'}
 
     def validate(self):
@@ -22,6 +25,39 @@ class TableProperties:
     def concat_cols_with_types(self):
         create_statements = [f'{self.columns[index]} {self.data_types[index]}' for index in range(len(self.columns))]
         return create_statements
+
+    def get_query_create_table(self):
+        query_create_table = f"""
+        CREATE TABLE IF NOT EXISTS {self.table_name}
+          ({', '.join(self.create_statements)});
+        """
+        query_create_table = query_create_table.replace('\'', '')
+        return query_create_table
+
+    def get_query_insert_into(self):
+
+        columns = self.columns
+        data_types = self.data_types
+
+        for data_type in data_types:
+            if re.search('serial', data_type, re.IGNORECASE):
+                index = data_types.index(data_type)
+                columns.pop(index)
+
+        columns_as_string = ', '.join(columns)
+
+        value_placeholders = ''
+        for i in enumerate(columns):
+            value_placeholders += '(%s), '
+        value_placeholders = value_placeholders.strip(', ')
+
+        query = F"""
+        INSERT INTO
+          {self.table_name} ({columns_as_string})
+        VALUES
+          ({value_placeholders});
+        """
+        return query
 
 
 # TableProperties Instances
@@ -61,7 +97,7 @@ time_properties = TableProperties('time',
                                    ('weekday', 'INT')])
 
 songplays_properties = TableProperties('songplays',
-                                       [('songplay_id', 'TEXT'),
+                                       [('songplay_id', 'SERIAL PRIMARY KEY'),
                                         ('start_time', 'TIMESTAMP'),
                                         # ('user_id', 'TEXT REFERENCES users(user_id)'),
                                         ('user_id', 'TEXT'),
@@ -101,6 +137,14 @@ time_table_insert = get_query_insert_into(time_properties.table_name, time_prope
 # FIND SONGS
 
 song_select = ("""
+SELECT artists.artist_id, song_id
+FROM songs
+JOIN artists
+  ON songs.artist_id = artists.artist_id
+WHERE
+    title = %s
+    AND name = %s
+    AND duration = %s;
 """)
 
 # QUERY LISTS
@@ -108,3 +152,21 @@ song_select = ("""
 create_table_queries = [artist_table_create, user_table_create, song_table_create,
                         time_table_create, songplay_table_create]
 drop_table_queries = [songplay_table_drop, user_table_drop, song_table_drop, artist_table_drop, time_table_drop]
+
+if __name__ == '__main__':
+    def print_queries():
+        queries = list()
+        queries.extend(create_table_queries)
+        queries.extend(drop_table_queries)
+        for query in queries:
+            print(query)
+
+    # print(songplays_properties.columns)
+
+    postgres_table_properties = [users_properties, songs_properties, artists_properties,
+                                 time_properties, songplays_properties]
+
+    for p in postgres_table_properties:
+        pass
+
+    print(songplays_properties.queries['insert_into'])
