@@ -6,6 +6,7 @@ import psycopg2
 import pandas as pd
 
 from sql_queries import *
+from create_tables import drop_tables, create_tables
 
 
 def set_sys_path():
@@ -96,6 +97,14 @@ def process_data(cur, conn, filepath, file_processor):
         file_processor(cur, datafile)
         conn.commit()
         print(f'{i}/{num_files} files processed.')
+
+
+def restart():
+    conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
+    cur = conn.cursor()
+    drop_tables(cur, conn)
+    create_tables(cur, conn)
+    conn.close()
 
 
 def main():
