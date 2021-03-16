@@ -69,7 +69,7 @@ time_table_insert = time_properties.queries['insert_into']
 # FIND SONGS
 
 song_select = ("""
-SELECT artists.artist_id, song_id
+SELECT song_id, artists.artist_id
 FROM songs
 JOIN artists
   ON songs.artist_id = artists.artist_id
