@@ -35,15 +35,21 @@ class TableProperties:
         columns = self.columns
         data_types = self.data_types
         primary_key = False
+        foreign_keys = []
 
         for data_type in data_types:
-            if re.search('serial', data_type, re.IGNORECASE):
-                index = data_types.index(data_type)
-                columns.pop(index)
 
             if re.search('primary key', data_type, re.IGNORECASE):
                 index = data_types.index(data_type)
                 primary_key = columns[index]
+
+            if re.search('serial', data_type, re.IGNORECASE):
+                index = data_types.index(data_type)
+                columns.pop(index)
+
+            if re.search('references', data_type, re.IGNORECASE):
+                index = data_types.index(data_type)
+                foreign_keys.append(columns[index])
 
         columns_as_string = ', '.join(columns)
 
