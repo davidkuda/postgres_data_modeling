@@ -50,7 +50,35 @@ Based on the two original tables I will create four dimension tables:
 
 ## Star Schema
 
-The "songplays" table is in the center of the four dimension tables:
+The "songplays" table is in the center of the four dimension tables. I
 
 ![The Star Schema](documentation/images/schemas/songplays.png)
 
+## The Facts Table "Songplays"
+
+"Songplays" represents the facts table which is in the center of the star schema. It holds these columns:
+
+- songplays_id
+- user_id
+- level
+- artist_id
+- song_id
+- artist_id
+- location
+- session_id
+- user_agent
+- start_time
+
+![The Facts Table](documentation/images/tables/songplays_table.png)
+
+## Justification, benefit and analysis
+
+With the facts table, sparkify has now many uses for business analysis. Here are some questions that can
+be answered now:
+
+- What songs are being played the most?
+- What is the preferred time for songplays?
+- What browser / operating system are being used?
+- What is the distribution between free and paid users?
+
+These additional information will enable sparkify to leverage data and make use of it. 
