@@ -40,6 +40,11 @@ class ETL:
         return df
 
 
+def restart(conn, cur):
+    drop_tables(cur, conn)
+    create_tables(cur, conn)
+
+
 def set_sys_path():
     """Make sure that sys.path[0] is the directory "src"."""
     current_path = sys.path[0]
@@ -126,4 +131,5 @@ def main():
 
 if __name__ == '__main__':
     set_sys_path()
+    # restart()
     main()
