@@ -42,12 +42,16 @@ class ETL:
 
 def set_sys_path():
     """Make sure that sys.path[0] is the directory "src"."""
-    current_path = os.path
+    current_path = sys.path[0]
     print('Current Path:')
     print(current_path)
+    if current_path.endswith('/src'):
+        print('Your path is correct')
+        return
+    # Correct path if necessary
     correct_path = os.path.abspath('src/')
-    print(f'Setting path to {correct_path}')
-    # sys.path.insert(0, correct_path)
+    print(f'Setting path to "{correct_path}"')
+    sys.path.insert(0, correct_path)
 
 
 def main():
