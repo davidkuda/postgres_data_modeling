@@ -14,8 +14,6 @@ class ETL:
     def __init__(self, conn, cur):
         self.conn = conn
         self.cur = cur
-        # self.song_files_path = song_files_path
-        # self.log_files_path = log_files_path
 
     @staticmethod
     def get_all_json_files(filepath: str):
