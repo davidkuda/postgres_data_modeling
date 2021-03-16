@@ -65,13 +65,11 @@ def main():
     file_path_song_data = '../data/song_data'
     song_data_files = etl.get_all_json_files(file_path_song_data)
     df_song_data = etl.files_to_df(song_data_files)
-    print(df_song_data.shape)
 
     # Get Log Data
     file_path_log_data = '../data/log_data'
     log_data_files = etl.get_all_json_files(file_path_log_data)
     df_log_data = etl.files_to_df(log_data_files)
-    print(df_log_data.shape)
 
     # Filter by Pages that have "NextSong" as value
     next_song_pages = df_log_data['page'] == 'NextSong'
