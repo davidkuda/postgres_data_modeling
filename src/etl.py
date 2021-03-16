@@ -63,29 +63,31 @@ def process_log_file(cur, filepath):
         cur.execute(user_table_insert, row)
 
     # insert songplay records
-    def tbd():
-        for index, row in df.iterrows():
+    for index, row in df_log_file.iterrows():
 
-            # get songid and artistid from song and artist tables
-            cur.execute(song_select, (row.song, row.artist, row.length))
-            results = cur.fetchone()
+        # get song_id and artist_id from song and artist tables
+        cur.execute(song_select, (row.song, row.artist, row.length))
+        results = cur.fetchone()
 
-            if results:
-                songid, artistid = results
-            else:
-                songid, artistid = None, None
+        if results:
+            song_id, artist_id = results
+        else:
+            song_id, artist_id = None, None
 
-            # insert songplay record
-            # songplay_data =
-            cur.execute(songplay_table_insert, songplay_data)
+        # insert songplay record
+        ids = pd.Series([song_id, artist_id], index=['song_id', 'artist_id'])
+        enriched_row = row.append(ids)
+        songplay_data = enriched_row[['ts', 'userId', 'level', 'song_id', 'artist_id',
+                                      'sessionId', 'location', 'userAgent']]
+        cur.execute(songplay_table_insert, songplay_data)
 
 
 def process_data(cur, conn, filepath, file_processor):
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
-        files = glob.glob(os.path.join(root,'*.json'))
-        for f in files :
+        files = glob.glob(os.path.join(root, '*.json'))
+        for f in files:
             all_files.append(os.path.abspath(f))
 
     # get total number of files found
@@ -118,4 +120,6 @@ def main():
 
 
 if __name__ == "__main__":
+    # set_sys_path()
+    restart()
     main()
