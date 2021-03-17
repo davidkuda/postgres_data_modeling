@@ -1,6 +1,7 @@
 import os
 import glob
 import sys
+from typing import List, Callable
 
 import psycopg2
 import pandas as pd
@@ -10,13 +11,33 @@ from create_tables import drop_tables, create_tables
 
 
 def set_sys_path():
-    """Make sure that sys.path[0] is the directory "src"."""
+    """Change "sys.path[0]" according to the requirements.
+
+    Make sure that sys.path[0] is the directory "src"."""
+    current_path = sys.path[0]
+    print('Current Path:')
+    print(current_path)
+    if current_path.endswith('/src'):
+        print('Your path is correct')
+        return
+    # Correct path if necessary
     correct_path = os.path.abspath('src/')
-    print(f'Setting path to {correct_path}')
+    print(f'Setting path to "{correct_path}"')
     sys.path.insert(0, correct_path)
 
 
-def process_song_file(cur, filepath):
+def process_song_file(cur, filepath: List[str]) -> None:
+    """Processes song files and uploads data to the tables artists and songs.
+
+    Args:
+        cur: The cursor from the database connection with psycopg2.
+        filepath (List[str]):
+          A list of strings where each string represents the path to the file
+          that contains the data.
+
+    Returns:
+        None
+    """
     # open song file
     df_song_file = pd.read_json(filepath, lines=True)
 
@@ -34,7 +55,18 @@ def process_song_file(cur, filepath):
         cur.execute(song_table_insert, record_as_list)
 
 
-def process_log_file(cur, filepath):
+def process_log_file(cur, filepath: List[str]):
+    """Processes log files and uploads data to the tables users and time.
+
+        Args:
+            cur: The cursor from the database connection with psycopg2.
+            filepath (List[str]):
+              A list of strings where each string represents the path to the file
+              that contains the data.
+
+        Returns:
+            None
+        """
     # open log file
     df_log_file = pd.read_json(filepath, lines=True)
 
@@ -82,7 +114,19 @@ def process_log_file(cur, filepath):
         cur.execute(songplay_table_insert, songplay_data)
 
 
-def process_data(cur, conn, filepath, file_processor):
+def process_data(cur, conn, filepath: str, file_processor: Callable) -> None:
+    """Collects all json files from a directory and uses the file_processor on them.
+
+    Args:
+        cur: The cursor from the database connection with psycopg2.
+        conn: The database connection with psycopg2.
+        filepath (str): The path to the directory that contains the files.
+        file_processor (Callable):
+          Either the  function "process_song_files" or "process_log_files".
+
+    Returns:
+        None
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -101,7 +145,8 @@ def process_data(cur, conn, filepath, file_processor):
         print(f'{i}/{num_files} files processed.')
 
 
-def restart():
+def restart() -> None:
+    """Drops all tables and creates all tables again (without data)."""
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
     drop_tables(cur, conn)
@@ -110,6 +155,7 @@ def restart():
 
 
 def main():
+    """Connects to db and processes song_data and log_data"""
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
