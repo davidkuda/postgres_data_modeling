@@ -1,77 +1,82 @@
-# Udacity Data Engineer Project 1
+# Modeling Data with PostgreSQL
 
-## Creating a postgres database for "Sparkify"
+### Table of Contents
+- Introduction - purpose of project, What is Sparkify, how this project is going to help it.
+- Database schema design and ETL process
+- Files in repository
+- How to run the python scripts
+
+### Introduction: Sparkify and user data.
 
 Sparkify is a (fictional) startup that offers music streaming services. They accumulate 
 data but do not yet leverage them. My job documented in this repository is to build an
-ETL pipeline. The data are stored in json files inside the folder `data/`. There
-are two kinds of files, a `log_file` and a `songs_file`. 
+ETL pipeline. Data are stored in json. I have created an SQL data model which is 
+explained below.
 
-I have built a star schema that holds four dimension-tables and one facts-table.
-The database is relational; I am using PostgreSQL.
+In order to perform the ETL process, I will use Python to extract data from json files, 
+transform the data with Pandas and finally upload the data to postgres using Psycopg2. 
 
-I will get the raw data out of the json files and organize them into four tables.
-These four tables are going to be the dimensions tables. They will be the basis
-for the facts table in the middle: The songplays table.
+With the data model and the Sparkify will have the ability to perform several analyses.
+For instance, Sparkify will gain the ability to understand which songs are being played
+the most, which OS and browser their users use or how the distribution between free
+and paid users is.
 
-Here is an overview of the data and the schema:
+Now that we have learned more about Sparkify, I will present more details about the
+data in the next chapter.
 
-## Original Data
+### Database Schema Design and ETL Process
 
-### Diagram
+The data is now stored in multi line delimitied json files inside the folder `data`.
+The original data can be split up into two tables: `song_file_data` and `log_file_data`.
+The following diagram shows the original data:
+
+#### The original data is stored in two tables 
 ![The schema of the original data](documentation/images/schemas/original_files.png)
 
-### song_data
-![Original Table from song_data files](documentation/images/original_file_sample/song_file.png)
+On the one hand, I will split the data from `songs_file_data` to two dimension tables, 
+namely to the `artists` table and the `songs` table. On the other hand, `log_file_data`
+will become the `users` table and the `time` table.
 
-### log_data
-![Original Table from log_data files](documentation/images/original_file_sample/log_file.png)
-
-## The ETL process
-
-### Dimension Tables
-
-Based on the two original tables I will create four dimension tables:
-
-1. users
-2. songs
-3. artists
-4. time
-
-![The Four Dimension Tables](documentation/images/schemas/dimension_tables.png)
-
-`users` and `songs` are based on `songs_data`:
-
-![The Dimension Tables based on log_data](documentation/images/schemas/log_data_dimensions.png)
-
-`artists` and `time` are based on `log_data`:
+#### song_data transforms into the tables "artists" and "songs"
 
 ![The Dimension Tables based on song_data](documentation/images/schemas/songs_data_dimensions.png)
 
-## Star Schema
+#### log_data transforms into the tables "users" and "time"
 
-The "songplays" table is in the center of the four dimension tables. I
+![The Dimension Tables based on log_data](documentation/images/schemas/log_data_dimensions.png)
+
+The four tables will represent the dimension tables.
+
+#### Dimension Tables
+
+Based on the two original tables are the four dimension tables. The following
+diagram shows all four dimension tables. These four tables will exist in postgres,
+the code in this repository will upload the data to postgres.
+
+![The Four Dimension Tables](documentation/images/schemas/dimension_tables.png)
+
+In the center of the dimension table will be the fact table. together, these form
+a star schema.
+
+#### The Facts Table "Songplays" and the Star Schema
+
+The `songplays` table is in the center of the four dimension tables. It gets it's
+data from the original `log_data` as well as the `user_id` from the `users` and the 
+`artist_id` from the `artists` table. The `songplays` table references every dimension 
+table with a corresponding foreign key. The following diagram depicts the relation
+of every column of the facts table:
 
 ![The Star Schema](documentation/images/schemas/songplays.png)
 
-## The Facts Table "Songplays"
-
-"Songplays" represents the facts table which is in the center of the star schema. It holds these columns:
-
-- songplays_id
-- user_id
-- level
-- artist_id
-- song_id
-- artist_id
-- location
-- session_id
-- user_agent
-- start_time
+The following image shows sample data of the `songplays` facts table:
 
 ![The Facts Table](documentation/images/tables/songplays_table.png)
 
-## Justification, benefit and analysis
+Note: Normally, the columns "song_id" and "artist_id" would be NOT NULL. However,
+the original data is limited. Thus, there are many rows that have null values for
+the "song_id" and "artist_id".
+
+#### Justification, benefit and analysis
 
 With the facts table, sparkify has now many uses for business analysis. Here are some questions that can
 be answered now:
@@ -82,3 +87,43 @@ be answered now:
 - What is the distribution between free and paid users?
 
 These additional information will enable sparkify to leverage data and make use of it. 
+
+### Files in this repository
+
+There are four folders in this repository.
+
+- __data__ holds the original data.
+- __notebooks__ holds all jupyter notebook. These are files ending in `ipynb`.
+- __src__ holds the python scripts that perform the ETL process. 
+- __documentation__ contains pictures, screenshots, diagrams, etc.
+
+Inside __notebooks__ you will find three files. Here is a brief explanation of 
+the notebooks:
+
+- `etl.ipynb` walks through the ETL process and explains the steps. 
+- `explore_data.ipynb` is a means to explore all five postgres tables.
+- `test.ipynb` tests if all tables have been successfully created.
+
+Inside __src__ you will find five files upon which this project depends. Here is
+a short introduction to these scripts:
+
+- `TableProperties.py` defines the class TableProperties. This class
+  builds objects that have properties such as `songs_tableproperties.columns`.
+- `sql_queries.py` holds every SQL query that is necessary for this project.
+- `create_table.py` deletes all tables and creates them again (without rows). 
+- `etl.py` is a programmatic representation of `etl.ipynb`.  
+- `etl_david.py` refactors `etl.py` to improve readability and stability.
+
+### How to run the python scripts
+
+Make sure that the machine that runs the scripts have Postgres installed and available.
+It's important that the directory `src/` is set to the root. So either make sure to
+run the scripts with PYTHONPATH set or make sure to change `sys.path[0]`.
+
+As soon as you fulfill these two requirements, you can run `etl_david.ipynb`. This
+script will create all tables and populate the data from `data/`.
+
+```bash
+PYTHONPATH="~/path/to/folder/src/:$PYTHONPATH" python3 <script_to_execute>
+PYTHONPATH="~/dev/repos/postgres_data_modeling/src/:$PYTHONPATH" python3 etl_david.py
+```
