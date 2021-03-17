@@ -84,13 +84,17 @@ def main():
     artists_data = df_song_data[['artist_id', 'artist_name', 'artist_location',
                                  'artist_latitude', 'artist_longitude']].values
 
+    print(f'Start loading {len(df_song_data.index)} rows for artists table.')
     for row in artists_data:
         cur.execute(artist_table_insert, list(row))
+    print('Done')
 
     # Upload Songs Data
     songs_data = df_song_data[['song_id', 'title', 'artist_id', 'year', 'duration']].values
+    print(f'Start loading {len(df_song_data.index)} rows for songs table.')
     for row in songs_data:
         cur.execute(song_table_insert, list(row))
+    print('Done')
 
     # Extract Data for Time Table
     timestamps = df_log_data['ts']
@@ -101,15 +105,20 @@ def main():
     df_time = pd.DataFrame(d)
 
     # Upload Time Data
+    print(f'Start loading {len(df_time.index)} rows for time table.')
     for row in df_time.values:
         cur.execute(time_table_insert, list(row))
+    print('Done')
 
     # Upload Users Data
     df_users = df_log_data[['userId', 'firstName', 'lastName', 'gender', 'level']]
+    print(f'Start loading {len(df_log_data.index)} rows for users table.')
     for row in df_users.values:
         cur.execute(user_table_insert, list(row))
+    print('Done')
 
     # Upload Songplays Data
+    print(f'Start loading {len(df_log_data.index)} rows for songplays table.')
     for index, row in df_log_data.iterrows():
 
         # get song_id and artist_id from song and artist tables
@@ -127,6 +136,7 @@ def main():
         songplay_data = enriched_row[['ts', 'userId', 'level', 'song_id', 'artist_id',
                                       'sessionId', 'location', 'userAgent']]
         cur.execute(songplay_table_insert, list(songplay_data))
+    print('Done')
 
 
 if __name__ == '__main__':
